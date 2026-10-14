@@ -1,0 +1,169 @@
+/* ==========================================================================
+   Code Block Folder - Pixel-Aligned Top-Right Controls Edition
+   保留原主题顶栏（左侧红黄绿圆点、顶栏背景、最右侧复制按钮）完全不动，
+   仅在顶栏右侧（复制按钮左边）添加「代码语言 | 行数」与「展开折叠符号」
+   ========================================================================== */
+
+/* 顶栏右侧控制区容器（与右侧复制图标、左侧红黄绿圆点处于同一水平中心线） */
+.cbf-controls {
+  position: absolute;
+  top: 4px;
+  right: 36px;
+  height: 27px;
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 6px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  font-family: var(
+    --font-interface,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif
+  );
+  font-size: 12px;
+  line-height: 1;
+  color: var(--text-muted, #64748b);
+  background: transparent;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: color 0.16s ease, background-color 0.16s ease;
+}
+
+.cbf-controls:hover {
+  color: var(--text-normal, #334155);
+  background-color: rgba(128, 128, 128, 0.1);
+}
+
+.cbf-controls:focus-visible {
+  outline: 2px solid var(--interactive-accent);
+  outline-offset: 1px;
+}
+
+/* 代码语言 | 行数（统一使用相同字体度量，消除基线高低差） */
+.cbf-meta {
+  display: inline-flex;
+  align-items: center;
+  height: 100%;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.cbf-lang {
+  display: inline-flex;
+  align-items: center;
+  height: 100%;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  color: inherit;
+}
+
+.cbf-divider {
+  display: inline-flex;
+  align-items: center;
+  height: 100%;
+  opacity: 0.38;
+  font-size: 11px;
+  line-height: 1;
+}
+
+.cbf-lines {
+  display: inline-flex;
+  align-items: center;
+  height: 100%;
+  font-size: 12px;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.9;
+}
+
+/* 展开折叠符号按钮 */
+.cbf-fold-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  color: inherit;
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.16s ease, color 0.16s ease;
+}
+
+.cbf-fold-icon svg {
+  width: 14px;
+  height: 14px;
+  display: block;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* 折叠状态：箭头顺滑旋转为向右 (-90deg)，并高亮提示已折叠 */
+.cbf-controls.is-collapsed .cbf-fold-icon {
+  transform: rotate(-90deg);
+  color: var(--interactive-accent, #6366f1);
+}
+
+/* ==========================================================================
+   1. 阅读视图 (Reading View)：完全保留原主题顶栏，折叠时仅收起 code 正文
+   ========================================================================== */
+
+.markdown-rendered pre.cbf-reading-pre {
+  position: relative;
+}
+
+/* 阅读视图折叠状态：隐藏 code 正文，消除底部内边距，仅保留原主题顶栏 */
+.markdown-rendered pre.cbf-reading-pre.is-collapsed {
+  padding-bottom: 0 !important;
+  min-height: 0 !important;
+  height: auto !important;
+  overflow: hidden !important;
+}
+
+.markdown-rendered pre.cbf-reading-pre.is-collapsed > code {
+  display: none !important;
+}
+
+/* ==========================================================================
+   2. 实时预览与编辑模式 (Live Preview / Source Mode - CodeMirror 6)
+   ========================================================================== */
+
+.cm-s-obsidian .cm-line.cbf-cm-begin-expanded,
+.cm-s-obsidian .cm-line.cbf-cm-begin-collapsed {
+  position: relative;
+}
+
+/* 折叠状态下：保留第一行（原主题顶栏），补齐底部圆角，隐藏后续所有代码行 */
+.cm-s-obsidian .cm-line.cbf-cm-begin-collapsed {
+  border-bottom-left-radius: var(--radius-s, 6px) !important;
+  border-bottom-right-radius: var(--radius-s, 6px) !important;
+  border-bottom: 1px solid var(--background-modifier-border, rgba(128, 128, 128, 0.2)) !important;
+}
+
+/* 当处于折叠状态且光标不在首行时，隐藏首行可能露出的 ```lang 源码字样，保持顶栏干净 */
+.cm-s-obsidian .cm-line.cbf-cm-begin-collapsed:not(.cm-active) > span:not(.cbf-controls):not(.code-block-flair) {
+  opacity: 0 !important;
+  font-size: 0 !important;
+}
+
+/* 隐藏已折叠代码块的后续所有代码行与闭合围栏行 */
+.cm-s-obsidian .cm-line.cbf-cm-line-collapsed {
+  display: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cbf-controls,
+  .cbf-fold-icon {
+    transition: none !important;
+  }
+}

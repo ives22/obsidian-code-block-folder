@@ -1,0 +1,9 @@
+{
+  "id": "code-block-folder",
+  "name": "Code Block Folder",
+  "version": "1.0.0",
+  "minAppVersion": "1.0.0",
+  "description": "在阅读视图和实时预览模式下为 Markdown 代码块添加顶部折叠控制栏（显示语言与行数），支持点击一键收起为单行信息栏、按行数自动折叠及全局一键折叠/展开。",
+  "author": "Antigravity",
+  "isDesktopOnly": false
+}
